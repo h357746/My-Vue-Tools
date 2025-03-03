@@ -1,5 +1,28 @@
 <template>
   <div class="drag-wrap" @dragover.prevent @drop="handleDrop">
+    <div class="preview">
+      <a-space>
+        <a-tooltip>
+          <template #title>PC端预览</template>
+          <img
+            @click="handlePreview('pc')"
+            src="@/assets/images/pc-view.png"
+            alt=""
+            class="preview-icon"
+          />
+        </a-tooltip>
+
+        <a-tooltip>
+          <template #title>手机端预览</template>
+          <img
+            @click="handlePreview('mobile')"
+            src="@/assets/images/mobile-view.png"
+            alt=""
+            class="preview-icon"
+          />
+        </a-tooltip>
+      </a-space>
+    </div>
     <a-form :layout="formConfig.layout" :labelAlign="formConfig.labelAlign" :label-col="labelCol">
       <a-row :gutter="24">
         <transition-group name="drag">
@@ -32,6 +55,7 @@
         </transition-group>
       </a-row>
     </a-form>
+    <formView ref="formViewRef" />
   </div>
 </template>
 <script setup>
@@ -39,8 +63,9 @@ import { ref, markRaw, computed } from 'vue'
 import { compList } from './component-mapping.js'
 import { useFormSettingStore } from '@/stores/formSetting.js'
 import { DeleteTwoTone, CopyTwoTone } from '@ant-design/icons-vue'
+import formView from './form-view.vue'
 const store = useFormSettingStore()
-
+const formViewRef = ref(null)
 // 确保 formCompList 是响应式的
 const formCompList = computed(() => store.getFormCompList)
 const formConfig = computed(() => store.getFormConfig)
@@ -51,10 +76,6 @@ const labelCol = computed(() => {
     },
   }
 })
-
-const wrapperCol = {
-  span: 24,
-}
 
 let dragIndex = -1
 
@@ -129,6 +150,11 @@ function copyFormItem(index) {
   newList.splice(formCompList.value.length, 0, draggedItem)
   store.setFormCompList(newList)
 }
+function handlePreview(type) {
+  if (type === 'pc') {
+    formViewRef.value.showModal(type)
+  }
+}
 </script>
 <style lang="less" scoped>
 .drag-wrap {
@@ -136,6 +162,18 @@ function copyFormItem(index) {
   height: 100%;
   padding: 20px;
   overflow: auto;
+  position: relative;
+}
+.preview {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+  .preview-icon {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
 }
 
 .draggable-item {
