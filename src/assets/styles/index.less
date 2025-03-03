@@ -1,0 +1,40 @@
+.page-bg {
+  width: 100vw;
+  height: 100vh;
+  background: url('@/assets/images/background.png') no-repeat;
+  background-size: 100% 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.glass {
+  width: 80%;
+  height: 80%;
+  background: rgba(255, 255, 255, 0.2);
+  // backdrop-filter: blur(10px);
+  border-radius: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+}
+
+/* 添加全局滚动条美化样式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
